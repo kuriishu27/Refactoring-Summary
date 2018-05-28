@@ -164,28 +164,29 @@ Not all comments but the ones that are there because the code is bad.
 
 You have a code fragment that can be grouped together.
 
-```java
+```swift
 
-	void printOwing(double amount) {
-		printBanner();
-		//print details
-		System.out.println ("name:" + _name);
-		System.out.println ("amount" + amount);
+	func printOwing(amount: Double) {
+		printBanner()
+		// print details
+		print("name:" + _name)
+		print("amount:" + amount)
 	}
 ```
 
 to
 
-```java
+```swift
 
-	void printOwing(double amount) {
-		printBanner();
-		printDetails(amount);
+	func printOwing(amount: Double) {
+		printBanner()
+		// print details
+		printDetails(amount)
 	}
 
-	void printDetails (double amount) {
-		System.out.println ("name:" + _name);
-	System.out.println ("amount" + amount);
+	func printDetails(amount: Double) {
+		print("name:" + _name)
+		print("amount:" + amount)
 	}
 ```
 
