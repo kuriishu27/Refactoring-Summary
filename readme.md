@@ -172,6 +172,7 @@ You have a code fragment that can be grouped together.
 		print("name:" + _name)
 		print("amount:" + amount)
 	}
+
 ```
 
 to
@@ -188,6 +189,7 @@ to
 		print("name:" + _name)
 		print("amount:" + amount)
 	}
+
 ```
 
 **Motivation**
@@ -195,65 +197,69 @@ to
 * Increases the chances that other methods can use a method
 * Allows the higher-level methods to read more like a series of comments
 
-```java
+```swift
 
-	void printOwing(double previousAmount) {
-		Enumeration e = _orders.elements();
-		double outstanding = previousAmount * 1.2;
-		printBanner();
+	func printOwing(previousAmount: Double) {
+		let e: Enumeration = _orders.elements()
+		let outstanding: Double = previousAmount * 1.2
+		printBanner()
 
 		// calculate outstanding
-		while (e.hasMoreElements()) {
-			Order each = (Order) e.nextElement();
-			outstanding += each.getAmount();
+		while e.hasMoreElements() {
+			let each: Order = Order(e.nextElement())
+			outstanding += each.getAmount()
 		}
-		printDetails(outstanding);
+		printDetails(outstanding)
 	}
+
 ```
 
 to
 
-```java
+```swift
 
-	void printOwing(double previousAmount) {
-		printBanner();
-		double outstanding = getOutstanding(previousAmount * 1.2);
-		printDetails(outstanding);
+	func printOwing(previousAmount: Double) -> Double {
+		printBanner()
+		let outstanding: Double = getOutstanding(previousAmount * 1.2)
+		printDetails(outstanding)
 	}
 
-	double getOutstanding(double initialValue) {
-		double result = initialValue;
-		Enumeration e = _orders.elements();
+	func getOutstanding(initialValue: Double) {
+		var result: Double = initialValue
+		let e = _orders.elements()
 
-		while (e.hasMoreElements()) {
-			Order each = (Order) e.nextElement();
-			result += each.getAmount();
+		while e.hasMoreElements() {
+			let each = Order(e.nextElement)
+			result += each.getAmount()
 		}
-		return result;
+		return result
 	}
+
 ```
 
 ## 2. Inline Method
 A method's body is just as clear as its name.
 
-```java
+```swift
 
-	int getRating() {
-		return (moreThanFiveLateDeliveries()) ? 2 : 1;
+	func getRating() -> Int {
+		return moreThanFiveLateDeliveries() ? 2 : 1
 	}
 
-	boolean moreThanFiveLateDeliveries() {
-		return _numberOfLateDeliveries > 5;
+	func moreThanFiveLateDeliveries -> Bool {
+		return _numberOfLateDeliveries > 5
 	}
+
 ```
 
 to
 
-```java
+```swift
 
-	int getRating() {
-		return (_numberOfLateDeliveries > 5) ? 2 : 1;
+	func getRating() -> Int {
+		return (_numberOfLateDeliveries > 5) ? 2 : 1
 	}
+
 ```
 **Motivation**
 
@@ -264,17 +270,19 @@ to
 ## 3. Inline Temp
 You have a temp that is assigned to once with a simple expression, and the temp is getting in the way of other refactorings.
 
-```java
+```swift
 
-	double basePrice = anOrder.basePrice();
-	return (basePrice > 1000)
+	let basePrice = anOrder.basePrice()
+	return basePrice > 1000
+
 ```
 
 to
 
-```java
+```swift
 
-	return (anOrder.basePrice() > 1000)
+	return anOrder.basePrice() > 1000
+
 ```
 **Motivation**
 
@@ -283,26 +291,31 @@ to
 
 ## 4. Replace Temp with Query
 You are using a temporary variable to hold the result of an expression.
-```java
+```swift
 
-	double basePrice = _quantity * _itemPrice;
-	if (basePrice > 1000)
-		return basePrice * 0.95;
-	else
-		return basePrice * 0.98;
+	let basePrice = _quantity * _itemPrice
+
+	if basePrice > 1000 {
+		return basePrice * 0.95
+	} else {
+		return basePrice * 0.98
+	}
+
 ```
 to
 
-```java
+```swift
 
-	if (basePrice() > 1000)
-		return basePrice() * 0.95;
-	else
-		return basePrice() * 0.98;
+	if basePrice > 1000 {
+		return basePrice() * 0.95
+	} else {
+		return basePrice() * 0.98
+	}
 	...
-	double basePrice() {
+	func basePrice() -> Double {
 		return _quantity * _itemPrice;
 	}
+
 ```
 
 **Motivation**
@@ -312,22 +325,22 @@ to
 
 ## 5. Introduce Explaining Variable
 You have a complicated expression
-```java
+```swift
 
-	if ( (platform.toUpperCase().indexOf("MAC") > -1) &&
-		(browser.toUpperCase().indexOf("IE") > -1) &&
-		wasInitialized() && resize > 0 )
-	{
+	if platform.toUpperCase().indexOf("MAC") > -1 && 
+		 browser.toUpperCase().indexOf("IE") > -1 &&
+	   wasInitialized() && resize > 0 {
 		// do something
 	}
+
 ```
 to
 
-```java
+```swift
 
-	final boolean isMacOs = platform.toUpperCase().indexOf("MAC") >-1;
-	final boolean isIEBrowser = browser.toUpperCase().indexOf("IE") >-1;
-	final boolean wasResized = resize > 0;
+	let isMacOs = platform.toUpperCase().indexOf("MAC") >= 1
+	let isIEBrowser = browser.toUpperCase().indexOf("IE") >= 1
+	let wasResized = resize > 0
 	if (isMacOs && isIEBrowser && wasInitialized() && wasResized) {
 		// do something
 	}
@@ -341,20 +354,22 @@ to
 ## 6. Split Temporary Variable
 You have a temporary variable assigned to more than once, but is not a loop variable nor a collecting temporary variable.
 
-```java
+```swift
 
-	double temp = 2 * (_height + _width);
-	System.out.println (temp);
-	temp = _height * _width;
-	System.out.println (temp);
+	let temp: Double = 2 * (_height + _width)
+	print(temp)
+	temp = _height * _width
+	print(temp)
+
 ```
 to
-```java
+```swift
 
-	final double perimeter = 2 * (_height + _width);
-	System.out.println (perimeter);
-	final double area = _height * _width;
-	System.out.println (area);
+	let perimeter: Double = 2 * (_height + _width)
+	print(perimeter)
+	let area = _height * _width;
+	print(area)
+
 ```
 
 **Motivation**
